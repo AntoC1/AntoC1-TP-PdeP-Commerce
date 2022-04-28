@@ -1,0 +1,52 @@
+module Library where
+import PdePreludat
+
+doble :: Number -> Number
+doble numero = numero + numero
+
+type Producto = (String, Number)
+
+precioTotal :: Producto -> Number -> Number -> Number-> Number
+precioTotal unProducto cantidad descuento costoDeEnvio= (*cantidad).(aplicarDescuentoyCostoDeEnvio unProducto descuento) $ costoDeEnvio
+
+aplicarDescuentoyCostoDeEnvio :: Producto -> Number -> Number -> Number
+aplicarDescuentoyCostoDeEnvio unProducto descuento costoDeEnvio = snd(unProducto) - descuento + costoDeEnvio
+
+productoDeElite :: Producto -> Bool 
+productoDeElite unProducto = productoDeLujo unProducto && productoCodiciado unProducto && not(productoCorriente unProducto)
+
+aplicarDescuento :: Producto -> Number-> Number
+aplicarDescuento unProducto descuento= snd(unProducto) - descuento
+
+entregaSencilla :: String  -> Bool 
+entregaSencilla fecha = even.length $ fecha
+
+descodiciarProducto :: Producto -> String 
+descodiciarProducto unProducto = take 10 $ fst(unProducto)
+
+productoDeLujo :: Producto -> Bool 
+productoDeLujo unProducto = existeXenNombre unProducto|| existeYenNombre unProducto
+
+existeXenNombre :: Producto -> Bool
+existeXenNombre unProducto = elem 'x' $ fst(unProducto) 
+
+existeYenNombre :: Producto -> Bool
+existeYenNombre unProducto = elem 'y' $ fst(unProducto)
+
+aplicarCostoDeEnvio :: Producto -> Number -> Number
+aplicarCostoDeEnvio unProducto costoDeEnvio = snd(unProducto) + costoDeEnvio
+
+productoCodiciado :: Producto -> Bool
+productoCodiciado unProducto = (>10).length.fst $ unProducto 
+
+productoCorriente :: Producto -> Bool 
+productoCorriente unProducto = elem (primeraLetra unProducto) ['a','e','i','o','u']
+
+primeraLetra :: Producto -> Char
+primeraLetra unProducto = head.fst $unProducto
+
+productoXL :: Producto -> String
+productoXL unProducto = fst(unProducto) ++ "XL"
+
+versionBarata :: Producto -> String 
+versionBarata unProducto = reverse.descodiciarProducto $ unProducto
